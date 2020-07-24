@@ -375,57 +375,47 @@ class ColaProcessor(DataProcessor):
 
 class DemoProcessor(DataProcessor):
   """Processor for the Demo data set."""
-  def __init__(self):
-    self.labels = set()
-
   def get_train_examples(self, data_dir):
-    """定义训练集的数据，文件名需要根据自己的实际情况修改"""
-    return self._create_examples(
-        self._read_tsv(os.path.join(data_dir, "train.tsv")), "train")
+      file_path = os.path.join(data_dir, 'train.tsv')
+      with tf.gfile.GFile(file_path, 'r') as f:
+          reader = f.readlines()
+      examples = []
+      for index, line in enumerate(reader):
+          guid = 'train-%d' % index
+      split_line = line.strip().split('\t')
+      text_a = tokenization.convert_to_unicode(split_line[1])
+      task_label = int(split_line[0])
+      examples.append(InputExample(guid=guid, text_a=text_a, label=task_label))
+      return examples
 
   def get_dev_examples(self, data_dir):
-    """定义验证集的数据，文件名需要根据自己的实际情况修改."""
-    return self._create_examples(
-        self._read_tsv(os.path.join(data_dir, "dev.tsv")), "dev")
+      file_path = os.path.join(data_dir, 'dev.tsv')
+      with tf.gfile.GFile(file_path, 'r') as f:
+          reader = f.readlines()
+      examples = []
+      for index, line in enumerate(reader):
+          guid = 'dev-%d' % index
+      split_line = line.strip().split('\t')
+      text_a = tokenization.convert_to_unicode(split_line[1])
+      task_label = int(split_line[0])
+      examples.append(InputExample(guid=guid, text_a=text_a, label=task_label))
+      return examples
 
   def get_test_examples(self, data_dir):
-    """定义测试集的数据，文件名需要根据自己的实际情况修改."""
-    return self._create_examples(
-        self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
+      file_path = os.path.join(data_dir, 'test.tsv')
+      with tf.gfile.GFile(file_path, 'r') as f:
+          reader = f.readlines()
+      examples = []
+      for index, line in enumerate(reader):
+          guid = 'test-%d' % index
+      split_line = line.strip().split('\t')
+      text_a = tokenization.convert_to_unicode(split_line[1])
+      task_label = int(split_line[0])
+      examples.append(InputExample(guid=guid, text_a=text_a, label=task_label))
+      return examples
 
   def get_labels(self):
-    """这里是分类的标签，根据实际情况修改，我这里是3类"""
-    return ["0","1","2"]
-
-  def _create_examples(self, lines, set_type):
-    """Creates examples for the training and dev sets.
-		这个函数是用来把数据处理， 把每一个例子分成3个部分，填入到InputExample的3个参数
-		text_a 是第一个句子 的文本数据
-		text_b是第二个句子的文本，但是由于此任务是单句分类， 所以 这里传入为None
-		guid 是一个二元组  第一个表示此数据是什么数据集类型（train dev test） 第二个表示数据标号。
-		label 表示句子类别
-	"""
-    examples = []
-    for (i, line) in enumerate(lines):
-      # Only the test set has a header
-      if set_type == "test" and i == 0:
-        continue
-      guid = "%s-%s" % (set_type, i)
-      #print(line,i)  # 这里可以用来打印调试用，我是通过打印发现错误了的
-      if set_type == "test":
-      '''获取测试集 text ，我这里 第一列和第二列分别是 类别  文本 所以根据自己数据集情况添加'''
-        text_a = tokenization.convert_to_unicode(line[1])
-        label = "0"
-        '''测试时候这个label 从自己类别随便选一个，有人说可以随便写，比如label = "0",我测试的时候这样写报错。'''
-      else:
-     ''' 获取训练/验证集 text ，我这里 第一列和第二列分别是 类别  文本 所以根据自己数据集情况添加'''
-        text_a = tokenization.convert_to_unicode(line[1])
-        label = tokenization.convert_to_unicode(line[0])
-      examples.append(
-          InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
-    return examples
-
-
+      pass
 
 def convert_single_example(ex_index, example, label_list, max_seq_length,
                            tokenizer):
