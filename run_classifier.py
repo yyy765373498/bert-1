@@ -382,10 +382,10 @@ class DemoProcessor(DataProcessor):
       examples = []
       for index, line in enumerate(reader):
           guid = 'train-%d' % index
-      split_line = line.strip().split('\t')
-      text_a = tokenization.convert_to_unicode(split_line[1])
-      task_label = int(split_line[0])
-      examples.append(InputExample(guid=guid, text_a=text_a, label=task_label))
+          split_line = line.strip().split('\t')
+          text_a = tokenization.convert_to_unicode(split_line[1])
+          task_label = split_line[0]
+          examples.append(InputExample(guid=guid, text_a=text_a, label=task_label))
       return examples
 
   def get_dev_examples(self, data_dir):
@@ -395,10 +395,10 @@ class DemoProcessor(DataProcessor):
       examples = []
       for index, line in enumerate(reader):
           guid = 'dev-%d' % index
-      split_line = line.strip().split('\t')
-      text_a = tokenization.convert_to_unicode(split_line[1])
-      task_label = int(split_line[0])
-      examples.append(InputExample(guid=guid, text_a=text_a, label=task_label))
+          split_line = line.strip().split('\t')
+          text_a = tokenization.convert_to_unicode(split_line[1])
+          task_label = split_line[0]
+          examples.append(InputExample(guid=guid, text_a=text_a, label=task_label))
       return examples
 
   def get_test_examples(self, data_dir):
@@ -408,14 +408,14 @@ class DemoProcessor(DataProcessor):
       examples = []
       for index, line in enumerate(reader):
           guid = 'test-%d' % index
-      split_line = line.strip().split('\t')
-      text_a = tokenization.convert_to_unicode(split_line[1])
-      task_label = int(split_line[0])
-      examples.append(InputExample(guid=guid, text_a=text_a, label=task_label))
+          split_line = line.strip().split('\t')
+          text_a = tokenization.convert_to_unicode(split_line[1])
+          task_label = split_line[0]
+          examples.append(InputExample(guid=guid, text_a=text_a, label=task_label))
       return examples
 
   def get_labels(self):
-      pass
+      return ['0', '1', '2']
 
 def convert_single_example(ex_index, example, label_list, max_seq_length,
                            tokenizer):
